@@ -19,8 +19,8 @@ hotkeys_list = {'volume-up' : Key.media_volume_up, 'volume-down' : Key.media_vol
 keyboard = Controller()
 
 def pressKey(hotkey):
-    hotkey = hotkey.lstrip('/')
     # Based on the requested url from user, send hotkey to the pc
+    hotkey = hotkey.lstrip('/')
     print(hotkey)
     if hotkey in hotkeys_list.keys():
         keyboard.press(hotkeys_list[hotkey])
