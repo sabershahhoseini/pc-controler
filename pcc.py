@@ -1,3 +1,6 @@
+# Listens on http://192.168.1.104:8800/{hotkey} and when the url is requested, passes the
+# requested hotkey to pressKey to press hotkey using pynput module
+
 import socketserver
 import socket
 import subprocess
@@ -5,6 +8,8 @@ from http.server import BaseHTTPRequestHandler
 from pynput.keyboard import Key, Controller
 import platform
 
+ip = '192.168.1.104'
+port = '8800'
 
 # A list of hotkeys and their equal for pynput as dictionary
 hotkeys_list = {'volume-up' : Key.media_volume_up, 'volume-down' : Key.media_volume_down,
@@ -13,7 +18,7 @@ hotkeys_list = {'volume-up' : Key.media_volume_up, 'volume-down' : Key.media_vol
 
 keyboard = Controller()
 
-def sendHotkey(hotkey):
+def pressKey(hotkey):
     hotkey = hotkey.lstrip('/')
     # Based on the requested url from user, send hotkey to the pc
     print(hotkey)
@@ -33,16 +38,16 @@ def sendHotkey(hotkey):
 
 class MyHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        """get url path (hotkey) and send it to sendHotkey"""
-        sendHotkey(self.path)
+        """get url path (hotkey) and send it to pressKey"""
+        pressKey(self.path)
         self.send_response(200)
 
 class MyTCPServer(socketserver.TCPServer):
     def server_bind(self):
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind(self.server_address)
+        
 """Start serving on localhost and port 8800"""
-httpd = MyTCPServer(("192.168.1.104", 8800), MyHandler)
-"""Thread object is being created so we can do stuff after we are serving"""
+httpd = MyTCPServer((ip, port), MyHandler)
 print("Serving forever...")
 httpd.serve_forever()
