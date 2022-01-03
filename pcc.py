@@ -9,7 +9,7 @@ from pynput.keyboard import Key, Controller
 import platform
 
 ip = '192.168.1.104'
-port = '8800'
+port = 8800
 
 # A list of hotkeys and their equal for pynput as dictionary
 hotkeys_list = {'volume-up' : Key.media_volume_up, 'volume-down' : Key.media_volume_down,
